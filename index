@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>המדריך המלא לבינה מלאכותית – לרוני</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700;900&family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9922A;
+    --gold-light: #E8BC6A;
+    --gold-pale: #FAF0DC;
+    --ink: #1C1A14;
+    --navy: #1A2744;
+    --navy-mid: #2E4070;
+    --cream: #FDF8F0;
+    --warm-gray: #8A7F72;
+    --red-accent: #8B2E2E;
+    --section-bg: #FFFFFF;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Heebo', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    direction: rtl;
+    text-align: right;
+    line-height: 1.8;
+  }
+
+  .cover {
+    background: var(--navy);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 60px 40px;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 30%, rgba(201,146,42,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 80% at 80% 70%, rgba(46,64,112,0.6) 0%, transparent 70%);
+  }
+
+  .cover-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(201,146,42,0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,146,42,0.07) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .cover-inner { position: relative; z-index: 2; text-align: center; max-width: 800px; }
+  .cover-label { font-family: 'Heebo', sans-serif; font-size: 12px; letter-spacing: 4px; color: var(--gold-light); text-transform: uppercase; margin-bottom: 24px; opacity: 0.9; }
+  .cover-title { font-family: 'Frank Ruhl Libre', serif; font-size: clamp(42px, 8vw, 88px); font-weight: 900; color: #FFFFFF; line-height: 1.05; margin-bottom: 16px; letter-spacing: -1px; }
+  .cover-title span { color: var(--gold-light); display: block; }
+  .cover-subtitle { font-size: 18px; color: rgba(255,255,255,0.7); font-weight: 300; margin-bottom: 48px; max-width: 560px; margin-left: auto; margin-right: auto; }
+  .cover-divider { width: 80px; height: 2px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 0 auto 48px; }
+  .cover-tags { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+  .cover-tag { border: 1px solid rgba(201,146,42,0.4); color: var(--gold-light); padding: 8px 20px; border-radius: 40px; font-size: 13px; font-weight: 500; backdrop-filter: blur(4px); }
+  .cover-badge { position: absolute; top: 40px; left: 40px; background: var(--gold); color: var(--navy); font-weight: 700; font-size: 11px; padding: 8px 16px; border-radius: 4px; letter-spacing: 1px; }
+
+  .toc { background: var(--gold-pale); border-bottom: 3px solid var(--gold); padding: 60px 40px; }
+  .toc-inner { max-width: 900px; margin: 0 auto; }
+  .toc h2 { font-family: 'Frank Ruhl Libre', serif; font-size: 28px; font-weight: 700; color: var(--navy); margin-bottom: 32px; display: flex; align-items: center; gap: 12px; }
+  .toc h2::after { content: ''; flex: 1; height: 1px; background: var(--gold); opacity: 0.4; }
+  .toc-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+  .toc-item { background: white; border-radius: 10px; padding: 16px 20px; border-right: 4px solid var(--gold); display: flex; align-items: center; gap: 14px; text-decoration: none; color: var(--ink); transition: transform 0.2s, box-shadow 0.2s; }
+  .toc-item:hover { transform: translateX(-4px); box-shadow: 4px 4px 16px rgba(0,0,0,0.08); }
+  .toc-num { font-family: 'Frank Ruhl Libre', serif; font-size: 26px; font-weight: 900; color: var(--gold); min-width: 40px; }
+  .toc-text { font-size: 14px; font-weight: 500; line-height: 1.4; }
+
+  .intro-band { background: var(--navy-mid); color: white; padding: 40px; text-align: center; }
+  .intro-band p { max-width: 760px; margin: 0 auto; font-size: 16px; font-weight: 300; line-height: 2; opacity: 0.9; }
+  .intro-band strong { color: var(--gold-light); font-weight: 600; }
+
+  .section { padding: 80px 40px; max-width: 960px; margin: 0 auto; }
+  .section + .section { border-top: 1px solid rgba(0,0,0,0.08); }
+  .section-header { display: flex; align-items: flex-start; gap: 20px; margin-bottom: 40px; }
+  .section-number { font-family: 'Frank Ruhl Libre', serif; font-size: 72px; font-weight: 900; color: var(--gold); opacity: 0.25; line-height: 1; min-width: 70px; text-align: center; }
+  .section-title-block h2 { font-family: 'Frank Ruhl Libre', serif; font-size: clamp(28px, 5vw, 40px); font-weight: 700; color: var(--navy); line-height: 1.2; margin-bottom: 8px; }
+  .section-title-block .section-desc { font-size: 15px; color: var(--warm-gray); font-weight: 400; }
+  .section-body { font-size: 16px; line-height: 1.9; color: #333; }
+  .section-body p { margin-bottom: 18px; }
+  .section-body h3 { font-family: 'Frank Ruhl Libre', serif; font-size: 22px; font-weight: 700; color: var(--navy); margin: 36px 0 14px; padding-bottom: 8px; border-bottom: 2px solid var(--gold-pale); }
+
+  .card-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; margin: 28px 0; }
+  .card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border-top: 3px solid var(--gold); }
+  .card-icon { font-size: 32px; margin-bottom: 12px; }
+  .card h4 { font-family: 'Frank Ruhl Libre', serif; font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 10px; }
+  .card p { font-size: 14px; color: #555; line-height: 1.7; margin: 0; }
+
+  .prompt-box { background: var(--navy); border-radius: 12px; padding: 28px 32px; margin: 24px 0; position: relative; overflow: hidden; }
+  .prompt-box::before { content: '»'; position: absolute; top: 16px; left: 24px; font-size: 64px; color: var(--gold); opacity: 0.15; font-family: 'Frank Ruhl Libre', serif; }
+  .prompt-box .prompt-label { font-size: 11px; letter-spacing: 2px; color: var(--gold-light); text-transform: uppercase; margin-bottom: 10px; font-weight: 600; }
+  .prompt-box p { color: rgba(255,255,255,0.9); font-size: 15px; line-height: 1.8; margin: 0; font-family: 'Frank Ruhl Libre', serif; font-weight: 400; }
+  .prompt-box .prompt-result { margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(201,146,42,0.3); color: var(--gold-light); font-size: 13px; }
+
+  .compare-table { width: 100%; border-collapse: collapse; margin: 28px 0; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 16px rgba(0,0,0,0.07); }
+  .compare-table th { background: var(--navy); color: white; padding: 16px 20px; font-size: 15px; font-weight: 600; text-align: right; }
+  .compare-table th:first-child { background: var(--navy-mid); }
+  .compare-table td { padding: 14px 20px; font-size: 14px; border-bottom: 1px solid #F0EAE0; vertical-align: top; }
+  .compare-table tr:nth-child(even) td { background: #FAF7F2; }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table td:first-child { font-weight: 600; color: var(--navy-mid); background: var(--gold-pale) !important; }
+
+  .tip-box { border-right: 4px solid var(--gold); background: var(--gold-pale); border-radius: 0 10px 10px 0; padding: 20px 24px; margin: 24px 0; display: flex; gap: 16px; align-items: flex-start; }
+  .tip-icon { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
+  .tip-box p { font-size: 15px; color: var(--ink); margin: 0; line-height: 1.7; }
+  .tip-box strong { color: var(--navy); }
+
+  .warn-box { border-right: 4px solid var(--red-accent); background: #FFF0F0; border-radius: 0 10px 10px 0; padding: 20px 24px; margin: 24px 0; }
+  .warn-box p { font-size: 15px; margin: 0; }
+
+  .steps { counter-reset: step; margin: 24px 0; }
+  .step { display: flex; gap: 20px; margin-bottom: 24px; align-items: flex-start; }
+  .step-num { background: var(--gold); color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; flex-shrink: 0; }
+  .step-content h4 { font-family: 'Frank Ruhl Libre', serif; font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+  .step-content p { font-size: 15px; color: #444; margin: 0; line-height: 1.7; }
+
+  .voice-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin: 24px 0; }
+  .voice-card { background: white; border-radius: 12px; padding: 22px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.06); border: 2px solid transparent; transition: border-color 0.2s; }
+  .voice-card:hover { border-color: var(--gold); }
+  .voice-card .vc-icon { font-size: 36px; margin-bottom: 10px; }
+  .voice-card h4 { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+  .voice-card p { font-size: 12px; color: var(--warm-gray); margin: 0; line-height: 1.5; }
+  .badge-new { background: var(--gold); color: white; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; display: inline-block; margin-bottom: 6px; letter-spacing: 0.5px; }
+
+  .checklist { list-style: none; margin: 20px 0; }
+  .checklist li { padding: 10px 0; border-bottom: 1px solid #F0EAE0; display: flex; align-items: flex-start; gap: 12px; font-size: 15px; line-height: 1.6; }
+  .checklist li::before { content: '✦'; color: var(--gold); font-size: 12px; flex-shrink: 0; margin-top: 4px; }
+
+  .formula { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%); border-radius: 14px; padding: 32px; margin: 28px 0; text-align: center; color: white; }
+  .formula h3 { font-size: 13px; letter-spacing: 3px; color: var(--gold-light); margin-bottom: 20px; text-transform: uppercase; }
+  .formula-parts { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px; font-family: 'Frank Ruhl Libre', serif; }
+  .formula-part { background: rgba(255,255,255,0.1); border: 1px solid rgba(201,146,42,0.4); border-radius: 8px; padding: 12px 20px; font-size: 16px; font-weight: 700; }
+  .formula-op { font-size: 24px; color: var(--gold-light); font-weight: 300; }
+
+  .footer { background: var(--navy); color: rgba(255,255,255,0.6); text-align: center; padding: 48px 40px; font-size: 13px; line-height: 2; }
+  .footer .footer-title { font-family: 'Frank Ruhl Libre', serif; font-size: 22px; color: var(--gold-light); margin-bottom: 12px; }
+
+  .stripe { background: var(--navy); color: white; padding: 4px 0; }
+  .stripe-inner { max-width: 960px; margin: 0 auto; padding: 0 40px; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); opacity: 0.9; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  .cover-inner > * { animation: fadeUp 0.8s ease both; }
+  .cover-inner > *:nth-child(1) { animation-delay: 0.1s; }
+  .cover-inner > *:nth-child(2) { animation-delay: 0.25s; }
+  .cover-inner > *:nth-child(3) { animation-delay: 0.4s; }
+  .cover-inner > *:nth-child(4) { animation-delay: 0.5s; }
+  .cover-inner > *:nth-child(5) { animation-delay: 0.65s; }
+
+  @media (max-width: 600px) {
+    .section { padding: 48px 20px; }
+    .cover { padding: 48px 24px; }
+    .toc { padding: 40px 20px; }
+    .formula-parts { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="cover-grid"></div>
+  <div class="cover-badge">2025 · מדריך מעשי</div>
+  <div class="cover-inner">
+    <div class="cover-label">לרוני — מורה לשפה העברית</div>
+    <h1 class="cover-title">בינה מלאכותית<span>במשרתך</span></h1>
+    <p class="cover-subtitle">כל מה שצריך לדעת כדי לעבוד עם ChatGPT ו-Claude בצורה חכמה, יעילה ומהנה</p>
+    <div class="cover-divider"></div>
+    <div class="cover-tags">
+      <span class="cover-tag">✍️ כתיבת פרומפטים</span>
+      <span class="cover-tag">🎯 עבודה עם טקסט</span>
+      <span class="cover-tag">🎙️ קלט קולי</span>
+      <span class="cover-tag">📚 הוראת עברית</span>
+      <span class="cover-tag">🤝 שיתוף פעולה עם AI</span>
+    </div>
+  </div>
+</div>
+
+<div class="toc">
+  <div class="toc-inner">
+    <h2>תוכן העניינים</h2>
+    <div class="toc-list">
+      <a class="toc-item" href="#s1"><span class="toc-num">1</span><span class="toc-text">מהי בינה מלאכותית ואיך היא עובדת</span></a>
+      <a class="toc-item" href="#s2"><span class="toc-num">2</span><span class="toc-text">ChatGPT לעומת Claude – מה ההבדל?</span></a>
+      <a class="toc-item" href="#s3"><span class="toc-num">3</span><span class="toc-text">איך לכתוב פרומפטים מנצחים</span></a>
+      <a class="toc-item" href="#s4"><span class="toc-num">4</span><span class="toc-text">איך להגדיר את עצמך ואת ה-AI</span></a>
+      <a class="toc-item" href="#s5"><span class="toc-num">5</span><span class="toc-text">פרשנות ועיבוד תוצאות</span></a>
+      <a class="toc-item" href="#s6"><span class="toc-num">6</span><span class="toc-text">קלט קולי ושיחה חיה</span></a>
+      <a class="toc-item" href="#s7"><span class="toc-num">7</span><span class="toc-text">50+ דוגמאות שימוש למורה עברית</span></a>
+      <a class="toc-item" href="#s8"><span class="toc-num">8</span><span class="toc-text">כללי עבודה יעילה</span></a>
+    </div>
+  </div>
+</div>
+
+<div class="intro-band">
+  <p>ה-AI לא יחליף אותך — הוא יהפוך אותך ל<strong>מורה חזקה יותר</strong>. הכלים האלה נולדו כדי לעשות בשבילך את העבודה הגנרית, כדי שתוכלי להתמקד במה שחשוב: <strong>הקשר האנושי עם התלמידים</strong>.</p>
+</div>
+
+<div class="stripe"><div class="stripe-inner">פרק ראשון</div></div>
+<div class="section" id="s1">
+  <div class="section-header">
+    <div class="section-number">1</div>
+    <div class="section-title-block">
+      <h2>מהי בינה מלאכותית ואיך היא עובדת?</h2>
+      <p class="section-desc">הבנת הבסיס — בלי מונחים טכניים מיותרים</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <p>דמייני ספרייה ענקית שקיבלה חיים. ChatGPT ו-Claude קראו מאות מיליארדי מילים — ספרים, מאמרים, שיחות, דרכי לימוד — ולמדו לזהות דפוסי שפה. כשאת כותבת להם משהו, הם לא "מחפשים" בגוגל. הם <strong>מנבאים</strong>: מה התשובה הטובה ביותר שאפשר לייצר בהתאם לבקשה?</p>
+    <div class="card-row">
+      <div class="card"><div class="card-icon">🧠</div><h4>מה ה-AI יודע</h4><p>שפה, הסברים, תבניות, כתיבה יצירתית, פרשנות, תרגום, בדיקה לשונית, יצירת תוכן.</p></div>
+      <div class="card"><div class="card-icon">❌</div><h4>מה ה-AI לא יודע</h4><p>מה קורה כרגע בזמן אמת (ללא גישה לאינטרנט), פרטים אישיים עליך, דעות "אמיתיות".</p></div>
+      <div class="card"><div class="card-icon">✨</div><h4>למה זה שונה מגוגל</h4><p>גוגל מראה לך קישורים. ה-AI מייצר עבורך תוצר מותאם אישית, בדיוק לבקשה שלך.</p></div>
+    </div>
+    <div class="tip-box"><span class="tip-icon">💡</span><p><strong>חשובי על זה כך:</strong> ה-AI הוא עוזר מחקר מבריק שיש לו ידע עצום, אבל חסרה לו שיקול דעת חי. את המוחות — הוא כלי העיבוד. הקשר שלך עם התלמידים — הוא לא יוכל לשכפל.</p></div>
+    <h3>מה ה-AI מצטיין בו בעבודת מורה לעברית?</h3>
+    <ul class="checklist">
+      <li>יצירת תרגילים, בחינות ודפי עבודה בכמה שניות</li>
+      <li>הסבר כללי דקדוק בדרכים שונות לרמות שונות</li>
+      <li>תיקון טקסטים של תלמידים עם הסברים</li>
+      <li>תרגום וניתוח טקסטים עבריים קשים</li>
+      <li>יצירת סיפורים, דיאלוגים ומשחקי שפה</li>
+      <li>הכנת חומרי הוראה ויזואליים כגון טבלאות ורשימות</li>
+      <li>סיכום נושאים מורכבים בשפה פשוטה</li>
+    </ul>
+  </div>
+</div>
+
+<div class="stripe"><div class="stripe-inner">פרק שני</div></div>
+<div class="section" id="s2">
+  <div class="section-header">
+    <div class="section-number">2</div>
+    <div class="section-title-block">
+      <h2>ChatGPT לעומת Claude — מה ההבדל?</h2>
+      <p class="section-desc">שני כלים מצוינים, כל אחד עם אופי שונה</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <table class="compare-table">
+      <thead><tr><th>נושא</th><th>💬 ChatGPT (OpenAI)</th><th>🟠 Claude (Anthropic)</th></tr></thead>
+      <tbody>
+        <tr><td>סגנון כתיבה</td><td>ישיר, ממוקד, לעיתים קצר</td><td>ניואנסי, ספרותי, מפורט יותר</td></tr>
+        <tr><td>עברית</td><td>טוב, עם טעויות קלות לעיתים</td><td>טוב מאוד, מבין הקשר עברי</td></tr>
+        <tr><td>טקסטים ארוכים</td><td>טוב לתוכן בינוני</td><td>מצוין — יכול לקרוא ולנתח מסמכים ארוכים</td></tr>
+        <tr><td>קלט קולי</td><td>✅ כן — ב-App בנייד</td><td>✅ כן — ב-App בנייד (מצב Voice)</td></tr>
+        <tr><td>תמיכה בעברית בקלט קולי</td><td>✅ מצוין</td><td>✅ טוב</td></tr>
+        <tr><td>גישה לאינטרנט</td><td>✅ כן (בגרסה עם Browse)</td><td>✅ כן (בגרסאות מסוימות)</td></tr>
+        <tr><td>מחיר</td><td>חינם / $20 לחודש (Plus)</td><td>חינם / $20 לחודש (Pro)</td></tr>
+        <tr><td>הכי מתאים ל…</td><td>שאלות מהירות, תרגומים, דרגה ראשונה</td><td>ניתוח טקסטים, כתיבה מורכבת, עיבוד ארוך</td></tr>
+      </tbody>
+    </table>
+    <div class="tip-box"><span class="tip-icon">🏆</span><p><strong>המלצה:</strong> השתמשי בשניהם! השתמשי ב-ChatGPT לשאלות מהירות ולקלט קולי, וב-Claude כשאת צריכה ניתוח עמוק, כתיבה לשונית מדויקת, או לקרוא מסמך שלם ולסכם.</p></div>
+  </div>
+</div>
+
+<div class="stripe"><div class="stripe-inner">פרק שלישי — הלב של המדריך</div></div>
+<div class="section" id="s3">
+  <div class="section-header">
+    <div class="section-number">3</div>
+    <div class="section-title-block">
+      <h2>איך לכתוב פרומפטים מנצחים?</h2>
+      <p class="section-desc">הפרומפט הוא ההוראה שאת נותנת. ככל שהיא מדויקת יותר — כך התוצאה טובה יותר</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="formula">
+      <h3>נוסחת הפרומפט המנצח</h3>
+      <div class="formula-parts">
+        <div class="formula-part">🎭 תפקיד<br><small style="opacity:0.7;font-size:12px">מי אתה?</small></div>
+        <div class="formula-op">+</div>
+        <div class="formula-part">📋 משימה<br><small style="opacity:0.7;font-size:12px">מה לעשות?</small></div>
+        <div class="formula-op">+</div>
+        <div class="formula-part">🎯 קהל<br><small style="opacity:0.7;font-size:12px">למי?</small></div>
+        <div class="formula-op">+</div>
+        <div class="formula-part">📐 פורמט<br><small style="opacity:0.7;font-size:12px">איך להציג?</small></div>
+        <div class="formula-op">+</div>
+        <div class="formula-part">⚙️ הגבלות<br><small style="opacity:0.7;font-size:12px">מה לא?</small></div>
+      </div>
+    </div>
+    <h3>❌ פרומפט חלש לעומת ✅ פרומפט חזק</h3>
+    <div class="prompt-box">
+      <div class="prompt-label">❌ לפני — פרומפט חלש</div>
+      <p>תכתוב לי תרגיל על ניקוד.</p>
+      <div class="prompt-result">→ התוצאה: תרגיל גנרי שלא מתאים לתלמידים שלך</div>
+    </div>
+    <div class="prompt-box">
+      <div class="prompt-label">✅ אחרי — פרומפט חזק</div>
+      <p>את מורה לעברית המלמדת כיתה ה'. כתבי תרגיל ניקוד מרתק על 10 מילים מן המקרא הכוללות שווא נע ושווא נח. הוסיפי הוראות ברורות, מרחב לכתיבה, ומפתח תשובות בסוף. הסגנון — ידידותי לילד.</p>
+      <div class="prompt-result">→ התוצאה: תרגיל מוכן להדפסה, בדיוק לצרכייך</div>
+    </div>
+    <h3>7 עקרונות לכתיבת פרומפטים</h3>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-content"><h4>הגדירי תפקיד</h4><p>"אתה מומחה לדקדוק עברי" / "אתה מורה לכיתות א'-ג'" — זה מכוון את כל הסגנון והרמה.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content"><h4>ציינו גיל ורמה</h4><p>"לתלמידי כיתה ח', רמה בינונית" — יחסוך ממך לבקש שינויים.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content"><h4>בקשי פורמט ספציפי</h4><p>"בצורת טבלה" / "ברשימה ממוספרת" / "כסיפור קצר" / "כשאלות אמריקאיות".</p></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-content"><h4>קיבעו את האורך</h4><p>"בין 150 ל-200 מילים" / "לא יותר מ-5 שאלות" — ה-AI אוהב מגבלות ברורות.</p></div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-content"><h4>תנו דוגמה</h4><p>"דומה לסגנון הזה: [הדבק טקסט]" — הדגמה שווה אלף מילות הסבר.</p></div></div>
+      <div class="step"><div class="step-num">6</div><div class="step-content"><h4>בקשי רב-שלבי</h4><p>"ראשית תאר, ואז הסבר, ואז תן 3 דוגמאות" — מבנה ברור = תשובה ברורה.</p></div></div>
+      <div class="step"><div class="step-num">7</div><div class="step-content"><h4>ציינו מה לא</h4><p>"ללא ניקוד" / "ללא מילים ארמיות" / "ללא לשון גבוהה" — גבולות = דיוק.</p></div></div>
+    </div>
+    <div class="warn-box"><p>⚠️ <strong>שים לב:</strong> ה-AI עלול "להמציא" עובדות. תמיד בדקו שמות, תאריכים ומקורות ספציפיים לפני שמעבירים לתלמידים.</p></div>
+  </div>
+</div>
+
+<div class="stripe"><div class="stripe-inner">פרק רביעי</div></div>
+<div class="section" id="s4">
+  <div class="section-header">
+    <div class="section-number">4</div>
+    <div class="section-title-block">
+      <h2>איך להגדיר את עצמך ואת ה-AI?</h2>
+      <p class="section-desc">פוזיציונינג — "System Prompt" — כלי הכוח הנסתר</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <p>ה-AI הוא כמו שחקן תיאטרון מוכשר ביותר. כשאת אומרת לו "אתה מורה לעברית עם 20 שנות ניסיון", הוא מתכוונן לאותו אופי לכל אורך השיחה.</p>
+    <div class="prompt-box">
+      <div class="prompt-label">הגדרת סיסטם — העתיקי והדביקי בתחילת כל שיחה חדשה</div>
+      <p>אתה עוזר מקצועי מומחה לשפה העברית ולהוראתה. השם שלי הוא רוני, אני מורה לעברית עם ניסיון בהוראה לכל הגילאים. תמיד כתוב עברית תקנית, ברורה ומדויקת. כשאני שואלת שאלה — ענה בצורה מסודרת ומפורטת. אם אני מבקשת חומרי הוראה — הם צריכים להיות מוכנים לשימוש מיידי. תמיד הצע וריאציה אחת נוספת בסוף.</p>
+    </div>
+    <h3>3 סוגי פוזיציונינג לשיחה</h3>
+    <div class="card-row">
+      <div class="card"><div class="card-icon">🎓</div><h4>ה-AI כעוזר הוראה</h4><p>"אתה עוזר הוראה שלי. תפקידך לייצר חומרים, לא להחליט מה ללמד."</p></div>
+      <div class="card"><div class="card-icon">🔬</div><h4>ה-AI כבודק</h4><p>"אתה בודק לשוני. תפקידך לסמן שגיאות ולהסביר אותן, לא לשכתב את הטקסט."</p></div>
+      <div class="card"><div class="card-icon">🧑‍🎓</div><h4>ה-AI כ"תלמיד"</h4><p>"אתה תלמיד שאינו יודע עברית. שאל שאלות על נושא X כדי שאוכל לתרגל הסברים."</p></div>
+    </div>
+    <div class="tip-box"><span class="tip-icon">🔑</span><p><strong>טיפ מתקדם:</strong> ב-ChatGPT אפשר לשמור "Instructions" בהגדרות — אז הן מופעלות בכל שיחה אוטומטית. ב-Claude ניתן להשתמש ב-"Projects" לשמירת הקשר קבוע.</p></div>
+  </div>
+</div>
+
+<div class="stripe"><div class="stripe-inner">פרק חמישי</div></div>
+<div class="section" id="s5">
+  <div class="section-header">
+    <div class="section-number">5</div>
+    <div class="section-title-block">
+      <h2>פרשנות ועיבוד תוצאות</h2>
+      <p class="section-desc">לא כל תשובה נכונה — ולא כל תשובה שגויה</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <h3>שלבי עיבוד התשובה</h3>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-content"><h4>קראי את התשובה — לא סרקי</h4><p>ה-AI לפעמים מטמין הערות חשובות באמצע. קראי כל מילה.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content"><h4>שאלי "מהיכן הוא לוקח את זה?"</h4><p>אם הוא מצטט מקור — בדקי. ה-AI עלול "להמציא" שמות מחברים ושנים.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content"><h4>בקשי הסבר על הסבר</h4><p>אם הסבר דקדוקי נראה מוזר — כתבי: "הסבר לי מדוע הכלל הזה נכון, עם דוגמאות נגדיות."</p></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-content"><h4>בקשי גרסה חלופית</h4><p>"כתוב לי את אותו תרגיל שוב, הפעם ביותר הומור / יותר פורמלי / לרמה גבוהה יותר."</p></div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-content"><h4>הוסיפי את הדעת שלך</h4><p>ה-AI מייצר. את מחליטה. תמיד שמרי לעצמך את הביקורת המקצועית האחרונה.</p></div></div>
+    </div>
+    <h3>ביטויים שימושיים לשיפור תשובות</h3>
+    <div class="card-row">
+      <div class="card"><div class="card-icon">🔄</div><h4>לשנות כיוון</h4><p>"זה טוב, אבל ארוך מדי. כווצ ל-50% תוך שמירה על הנקודות המרכזיות."</p></div>
+      <div class="card"><div class="card-icon">⬆️</div><h4>לשדרג</h4><p>"מצוין! עכשיו עשה את אותו הדבר, אבל ב-3 רמות קושי שונות."</p></div>
+      <div class="card"><div class="card-icon">🎨</div><h4>לשנות סגנון</h4><p>"כתוב את אותו הדבר בסגנון משחק, לא כתרגיל רשמי."</p></div>
+      <div class="card"><div class="card-icon">🔍</div><h4>לעמיק</h4><p>"הרחיב על הנקודה השלישית. אני רוצה עוד דוגמאות מהתנ"ך."</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="stripe"><div class="stripe-inner">פרק שישי</div></div>
+<div class="section" id="s6">
+  <div class="section-header">
+    <div class="section-number">6</div>
+    <div class="section-title-block">
+      <h2>קלט קולי ושיחה חיה</h2>
+      <p class="section-desc">דבר עם ה-AI כמו עם עוזר אנושי — זה אפשרי לחלוטין</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <p>אחת הפיצ'רים המדהימים ביותר: אפשר לדבר עם ה-AI בקול! בנייד, בלחיצת כפתור, אפשר לשאול בקול — ולקבל תשובה בטקסט או אפילו בקול.</p>
+    <div class="voice-grid">
+      <div class="voice-card"><div class="vc-icon">🎙️</div><div class="badge-new">ב-APP</div><h4>ChatGPT Voice Mode</h4><p>שיחה קולית אמיתית בזמן אמת. פתח את האפליקציה → לחץ על האייקון של הגלים. תומך בעברית!</p></div>
+      <div class="voice-card"><div class="vc-icon">🟠</div><div class="badge-new">ב-APP</div><h4>Claude Voice</h4><p>ב-App של Claude בנייד — לחצי על המיקרופון. מאפשר דיקטוי ושאלות קוליות בעברית.</p></div>
+      <div class="voice-card"><div class="vc-icon">📱</div><h4>כפתור מיקרופון</h4><p>בכל דפדפן בנייד — כפתור המיקרופון של המקלדת. מקליד מה שאת אומרת.</p></div>
+      <div class="voice-card"><div class="vc-icon">💻</div><h4>במחשב</h4><p>גוגל כרום → לחצי על המיקרופון בשורת הכתיבה של ChatGPT. עברית עובדת מצוין.</p></div>
+    </div>
+    <h3>רעיונות לשימוש בקלט קולי למורה עברית</h3>
+    <ul class="checklist">
+      <li>דיקטוי מהיר של רעיונות לשיעור בזמן נסיעה ברכב</li>
+      <li>שאל שאלות לשוניות תוך כדי הכנת חומרים</li>
+      <li>בדוק הגייה — דבר עם ה-AI ובקש שיסביר הגייה נכונה</li>
+      <li>תרגול שיחות — ה-AI מדבר איתך ומתקן בזמן אמת</li>
+      <li>תמלל שיעורים ישנים ממוקלטים לטקסט</li>
+    </ul>
+    <div class="tip-box"><span class="tip-icon">🎙️</span><p><strong>טיפ זהב:</strong> ב-ChatGPT Voice Mode המתקדם (גרסה Plus) — ניתן לנהל שיחה ממש כמו עם אדם. ה-AI מדבר חזרה, מקשיב, עונה בזמן אמת.</p></div>
+  </div>
+</div>
+
+<div class="stripe"><div class="stripe-inner">פרק שביעי — ארסנל למורה</div></div>
+<div class="section" id="s7">
+  <div class="section-header">
+    <div class="section-number">7</div>
+    <div class="section-title-block">
+      <h2>50+ דוגמאות שימוש למורה עברית</h2>
+      <p class="section-desc">העתיקי, שנו, והשתמשו — כבר מחר בבוקר</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <h3>📝 יצירת חומרי לימוד</h3>
+    <ul class="checklist">
+      <li>צרי דף עבודה על שמות עצם — זכר ונקבה — לכיתה ג', כולל 10 תרגילים ומפתח</li>
+      <li>כתוב בוחן קצר על הזמן הווה לכיתה ה' — 15 שאלות מרובות בחירה</li>
+      <li>יצר טבלת השוואה בין בניינים: פעל / פיעל / הפעיל</li>
+      <li>כתוב 5 קטעי קריאה קצרים (50-80 מילים) על נושאי טבע — לרמה א'</li>
+      <li>צרי סיפור המכיל 20 פעלים בעבר — לאיתור וסימון ע"י תלמיד</li>
+      <li>הכן רשימת מילות אוצר שבועיות לכיתה ז' עם משפטי הקשר</li>
+    </ul>
+    <h3>🔬 בדיקה ותיקון</h3>
+    <ul class="checklist">
+      <li>תקן את הטקסט הזה ורשם כל שגיאה עם ההסבר שלה: [הדבק טקסט תלמיד]</li>
+      <li>מה השגיאות הדקדוקיות בפסקה הזו? הסבר כל אחת בנפרד</li>
+      <li>האם הניקוד בטקסט זה נכון? סמן את השגיאות</li>
+      <li>ניתח את סגנון הכתיבה של הקטע הזה — נקודות חוזק וחולשה</li>
+    </ul>
+    <h3>🎮 פעילויות ומשחקים</h3>
+    <ul class="checklist">
+      <li>צרי משחק "מי אני?" — 10 רמזים בעברית לדמות מקראית</li>
+      <li>כתוב חידות שפה לכיתה ד' — על מילים נרדפות</li>
+      <li>יצר קלפי "שדה מוקשים" לשוני — בלבולי ניקוד לזיהוי</li>
+      <li>הכן שאלות "נכון/לא נכון" מצחיקות על כללי דקדוק</li>
+      <li>כתוב שיר לימודי על נטיית פועל — קליד וקל לזכירה</li>
+    </ul>
+    <h3>📊 הערכה ומשוב</h3>
+    <ul class="checklist">
+      <li>כתוב רובריקת הערכה לחיבור בעברית — 4 קריטריונים, 4 רמות</li>
+      <li>נסח משוב חיובי ומעודד לתלמיד שכתב את הטקסט הזה: [הדבק]</li>
+      <li>צור שאלות לדיון על ספרות: [שם ספר]</li>
+      <li>הכן מחוון לבדיקת הבנת הנקרא לכיתה ח'</li>
+    </ul>
+    <h3>📧 תקשורת מקצועית</h3>
+    <ul class="checklist">
+      <li>כתוב מייל להורים על פרויקט כתיבה קרוב — בסגנון חם ומקצועי</li>
+      <li>נסח תיאור מקצועי של יחידת לימוד לדוח שנתי</li>
+      <li>כתוב הצעה לפעילות עשרת הדיברות לאירוע ל"ג בעומר</li>
+      <li>הכן מצגת טקסט (bullet points) לפגישת הורים</li>
+    </ul>
+    <h3>💡 רעיונות ויצירתיות</h3>
+    <ul class="checklist">
+      <li>הצע 10 נושאי כתיבה יצירתית מרתקים לכיתה ו'</li>
+      <li>תן לי 5 דרכים שונות להסביר את ה"שווא" לילדים</li>
+      <li>הצע פעילות פתיחה מעניינת לשיעור על ספרות ילדים</li>
+      <li>תכנן שיעור של 45 דקות על פועל עתיד — כולל פעילויות</li>
+    </ul>
+  </div>
+</div>
+
+<div class="stripe"><div class="stripe-inner">פרק שמיני</div></div>
+<div class="section" id="s8">
+  <div class="section-header">
+    <div class="section-number">8</div>
+    <div class="section-title-block">
+      <h2>כללי עבודה יעילה</h2>
+      <p class="section-desc">גישות שישנו את הדרך בה תעבדי עם AI</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="card-row">
+      <div class="card"><div class="card-icon">🔁</div><h4>חשבי בשיחות, לא בשאלות</h4><p>אל תסגרי ותפתחי שיחה חדשה. המשיכי לשפר! "כעת תוסיפי..." / "שני זאת ל..."</p></div>
+      <div class="card"><div class="card-icon">📁</div><h4>שמרי פרומפטים מוצלחים</h4><p>קיבלת תשובה מדהימה? שמרי את הפרומפט ב-Notes. הוא יעבוד שוב ושוב.</p></div>
+      <div class="card"><div class="card-icon">🧪</div><h4>נסי השוואה</h4><p>שאלי את אותה שאלה ב-ChatGPT וב-Claude. השוואה תלמד אותך מה כל אחד טוב בו.</p></div>
+      <div class="card"><div class="card-icon">🚀</div><h4>התחילי קטן</h4><p>אל תבקשי הכל בבת אחת. בקשי דף עבודה אחד. שפרי. ואז הרחיבי.</p></div>
+      <div class="card"><div class="card-icon">🤝</div><h4>ה-AI הוא שותף, לא קסם</h4><p>התוצר שלו הוא נקודת פתיחה. ההתאמה האחרונה — תמיד שלך.</p></div>
+      <div class="card"><div class="card-icon">📚</div><h4>תרגלי מדי שבוע</h4><p>15 דקות ביום לניסוי שימוש חדש — ותוך חודש תהיי מומחית.</p></div>
+    </div>
+    <h3>שגיאות נפוצות שכדאי להימנע מהן</h3>
+    <ul class="checklist">
+      <li><strong>לקבל הכל כאמת</strong> — תמיד בדקי עובדות ספציפיות, שמות ותאריכים</li>
+      <li><strong>שאלה אחת ואיסות</strong> — נהלי שיחה מלאה, שפרי, התחדדי</li>
+      <li><strong>פרומפטים קצרים מדי</strong> — השקיעי 2 דקות בניסוח והרווחי 20 דקות עריכה</li>
+      <li><strong>לשכוח לציין שפה</strong> — תמיד ציינו "כתוב בעברית תקנית"</li>
+      <li><strong>פחד מטעויות של ה-AI</strong> — הוא טועה, תתקני, הוא ילמד בתוך אותה שיחה</li>
+    </ul>
+    <div class="tip-box"><span class="tip-icon">🌟</span><p><strong>המסר האחרון:</strong> ה-AI הוא הכלי החינוכי החזק ביותר שנולד בדורנו. מורה שמשתמשת בו נכון — לא עובדת פחות, אלא עובדת טוב יותר ומשפיעה יותר. רוני, את בדרך הנכונה!</p></div>
+  </div>
+</div>
+
+<div class="footer">
+  <p class="footer-title">✦ לרוני — המורה שמלמדת עברית בלב שלם ✦</p>
+  <p>כל הזכויות לידע שלך. ה-AI הוא רק כנפיים.</p>
+  <p style="margin-top:16px; opacity:0.5; font-size:11px; letter-spacing:2px;">ChatGPT · Claude · 2025 · מדריך מעשי לעבודה עם בינה מלאכותית</p>
+</div>
+
+</body>
+</html>
